@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js"
   },
@@ -12,5 +12,8 @@
   "dependencies": {
     "express": "^4.21.0",
     "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
   }
 }
