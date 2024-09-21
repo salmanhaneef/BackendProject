@@ -43,4 +43,19 @@ express.urlencoder because it encode the url and set the specific limit of data 
 app.get have four parameter(err,req,res,next)
 in these arguments next is use to define a middleware or next is a flag to pass next module to allow access the user.
 13. Then make a genralize function like i am talking mostly on database every time right a function ,I can make a genralize a function and access a function on any time and any place.
-14.Then i am using node js error class because handle the error for proper standard format
+14.Then i am using node js error class because handle the error for proper standard format.
+15. create a schema, index is true because i am using this field searching many times,this field is top searching on the mongo database.
+16.Aggregation Pipeline:
+
+
+17.Bcrypt and jwt:
+
+
+18. Not use jwt and bcrypt directly use mongoose hooks like pre and post.
+
+19. Customs method designed using mongoose:
+
+
+20.Jwt is a bearer token means its look like a key to access data .
+
+21.Mostly Access Token has short ecpiry period than refresh token period.
