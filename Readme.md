@@ -59,3 +59,12 @@ in these arguments next is use to define a middleware or next is a flag to pass 
 20.Jwt is a bearer token means its look like a key to access data .
 
 21.Mostly Access Token has short ecpiry period than refresh token period.
+
+
+22.clodinary:
+
+
+23.Fs:
+
+
+24.Multer:
