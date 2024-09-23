@@ -68,3 +68,9 @@ in these arguments next is use to define a middleware or next is a flag to pass 
 
 
 24.Multer:
+
+
+25.Http:
+
+
+26.basic routes declaration is app.get bacause all the routes and controllers declared in one file but in otherhand the routes and controllers are seprate file use middleware and app.use can make a routes declaration.
