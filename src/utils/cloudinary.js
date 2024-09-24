@@ -2,7 +2,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import fs from "fs";
 
-import { v2 as cloudinary } from 'cloudinary';
+// import { v2 as cloudinary } from 'cloudinary';
 
 // (async function() {
 
@@ -23,6 +23,7 @@ const uploadOnCloudinary = async (localFilePath) => {
         console.log("file uploaded successfully",
             response.url
         )
+        fs.unlinkSync(localFilePath)
             return response;
     } catch (error) {
         fs.unlinkSync(localFilePath)//remove the saved temporary file as the uplod operation got failed

@@ -14,47 +14,61 @@ const registerUser = asyncHnadler(async (req, res) => {
     //check for use creation
     //return response
 
-
-    const { fullname, email, username, password } = req.body
+//1
+    const { fullName, email, username, password } = req.body
     console.log("email", email)
     // if (fullname === "") {
     //     throw new ApiError("Full name is required", 400)
     // }
-    if ([fullname, email, username, password].some((field) => 
+    //2
+    if ([fullName, email, username, password].some((field) => 
         field?.trim() === ""
     )) {
         throw new ApiError(400,"All fields are required")
     }
-    const existedUser =User.findOne({
+    //3
+    const existedUser =await User.findOne({
         $or: [{ email }, { username }]
     })
     if (existedUser) {
         throw new ApiError(409, "User already exists")
     }
+    //4
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+    let coverImageLocalPath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path;
+        
+    }
+
     if (!avatarLocalPath) { 
         throw new ApiError(400, "Please provide an avatar image")
     }
+    //5
     const avatar = await uploadOnCloudinary(avatarLocalPath, coverImageLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
     if (!avatar) { 
         throw new ApiError(400, "Failed to upload avatar image")
     }
+    //6
     const user=await User.create({
-        fullname,
+        fullName,
         email,
         username : username.toLowerCase (),
         password,
         avatar: avatar.url,
         coverImage: coverImage?.url || ""
     })
+    //7
     const createdUser = await User.findById(user._id).select(
        "-password -refreshToken"
     )
-    if (createdUser) {
+    if (!createdUser) {
         throw new Error(500,"Something went wrong while registering the user")
     }
+    //8
     return res.status(201).json(
         new ApiResponse(200,createdUser,"User registered successfully")
     )
