@@ -304,6 +304,74 @@ const updateUserCoverImage = asyncHnadler(async (req, res) => {
         new ApiResponse(200, user, "Cover image updated successfully")
     )
 })
+    
+const getUserChangeProfile = asyncHnadler(async (req, res) => {
+    const { username } = req.prrams
+    
+    if (!username?.trim()) { 
+        throw new ApiError(400, "Username is required")
+    }
+    const channel = await User.aggregate([
+        {
+            $match: {
+               username:username?.toLowerCase()
+           }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "channel",
+                as: "subscribers"
+            }
+        }, {
+            $lookup: {
+                from: "subscriptions",
+                localField: "_id",
+                foreignField: "subscriber",
+                as: "subscribedTo"
+            }
+        },
+        {
+            $addFields: {
+                subscribersCount: {
+                    $size: "$subscribers"
+                },
+                channelsSubscribedToCount: {
+                    $size:"$subscribedTo"
+                },
+                issubscribed: {
+                    $cond: {
+                        if: { $sin: [req.user?.id, "$subscribers.subscriber"] },
+                        then: true,
+                        else: false
+                    }
+                }
+                
+            }
+        },
+        {
+            $project: {
+                username: 1,
+                fullName: 1,
+                email: 1,
+                avatar: 1,
+                coverImage: 1,
+                subscribersCount: 1,
+                channelsSubscribedToCount: 1,
+                isSubscribed: 1
+            }
+        }
+    ])
+
+    if (!channel?.length) {
+        throw new ApiError(404, "Channel does not exists")
+    }
+    return res.status(200).json(
+        new ApiResponse(200, channel[0], "User profile fetched successfully")
+    )
+})
+
 export {
     registerUser,
     loginUser,
@@ -313,6 +381,6 @@ export {
     getCurrentUser,//this is to get the current logged in userz
     updateAccountDetails,//this is to update the current logged in user's details
     updateUserAvatar,//this is to update the current logged in user's avatar
-    updateUserCoverImage//this is to update the current logged in user's cover image
-
+    updateUserCoverImage,//this is to update the current logged in user's cover image
+    getUserChangeProfile//this is to get the user profile by username
 }
