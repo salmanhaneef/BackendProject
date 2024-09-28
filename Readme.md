@@ -276,13 +276,10 @@ The **File System (FS)** module handles server-side file operations like reading
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-app.post('/upload', upload.single('videoFile'), (
+app.post('/upload', upload.single('videoFile'), 
 
-
-
+```
 ---
 
 This project exemplifies **production-level** code with **scalability**, **security**, and **performance** at its core. By using advanced MongoDB operators and Mongoose capabilities, the system is capable of handling complex queries and data transformations efficiently.
-
---- 
 
